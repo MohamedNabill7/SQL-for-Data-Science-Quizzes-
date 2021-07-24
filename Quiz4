@@ -1,1 +1,61 @@
 
+Q1) Pull a list of customer ids with the customer’s full name, and address, along with combining their city and country together.
+    Be sure to make a space in between these two and make it UPPER CASE. (e.g. LOS ANGELES USA)
+    
+    Ans:
+        select customerid , firstname , lastname , address , upper(city || ' '  ||country)
+        from customers
+        
+        ----------------------------------------------------------------------
+  
+Q2) Create a new employee user id by combining the first 4 letters of the employee’s first name with the first 2 letters of the employee’s last name. 
+    Make the new field lower case and pull each individual step to show your work.
+    
+    Ans:
+        select 
+        firstname     
+        ,lastname
+        ,lower(substr(firstname,1,4)) as A
+        ,lower(substr(lastname,1,2)) as B
+        ,lower(substr(firstname,1,4) || substr(lastname,1,2)) as user_id 
+        from employees
+        ----------------------------------------------------------------------
+        
+Q3) Show a list of employees who have worked for the company for 15 or more years using the current date function. 
+    Sort by lastname ascending.
+    
+    Ans:
+        select * from employees
+        where (date('now') - hiredate) >= 15
+        order by lastname asc
+        ----------------------------------------------------------------------
+        
+Q4) Profiling the Customers table, answer the following question.
+
+   Ans:
+        select * from customers
+        where [columns] is null
+        -- columns : address , firstname , fax , phone , company , postalcode 
+        ----------------------------------------------------------------------
+        
+Q5) Find the cities with the most customers and rank in descending order.
+
+    Ans:
+        select city ,count(*) as num_customer
+        from customers
+        group by city
+        order by count(*) desc
+        ----------------------------------------------------------------------
+        
+Q6) Create a new customer invoice id by combining a customer’s invoice id with their first and last name
+    while ordering your query in the following order: firstname, lastname, and invoiceID.
+    
+    Ans:
+        select 
+        C.firstname
+        ,C.lastname
+        ,I.InvoiceId
+        ,C.firstname || C.lastname || I.InvoiceId as new_customer
+        from customers C inner join invoices I 
+        on C.customerid = I.customerid
+        where new_customer like "AstridGruber%"
